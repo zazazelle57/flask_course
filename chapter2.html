@@ -1,0 +1,244 @@
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <link rel=stylesheet href="http://codemirror.net/lib/codemirror.css">
+    <!--<link rel=stylesheet href="http://codemirror.net/doc/docs.css">-->
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/mode/xml/xml.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+    <script src="http://codemirror.net/mode/css/css.js"></script>
+    <script src="http://codemirror.net/mode/python/python.js"></script>
+    <script src="http://codemirror.net/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <style>
+            body {
+              padding-top: 2rem;
+              padding-bottom: 2rem;
+            }
+
+            h3 {
+              margin-top: 2rem;
+            }
+
+            .row {
+              margin-bottom: 1rem;
+            }
+            .row .row {
+              margin-top: 1rem;
+              margin-bottom: 0;
+            }
+            [class*="col-"] {
+              padding-top: 1rem;
+              padding-bottom: 1rem;
+              background-color: rgba(86,61,124,.15);
+              border: 1px solid rgba(86,61,124,.2);
+            }
+
+            hr {
+              margin-top: 2rem;
+              margin-bottom: 2rem;
+            }
+
+            .CodeMirror {
+                height: auto;
+            }
+
+            .CodeMirror-scroll {
+                height: auto;
+            }
+
+            p {
+                margin-top: 0;
+                margin-bottom: 1rem;
+            }
+
+    </style>
+</head>
+<body>
+<p id="container">
+<h1>Chapter 2 - Interacting with users</h1>
+<h2><i>Creating forms with Flask, generating hypertext links and introduction to cookies.</i></h2>
+
+<h3>I- Creating forms with Flask</h3>
+
+<p>A form is a set of fields that are displayed in a web page. Users can fill these fields and submit the form to the
+    web application (usually by clicking on a submit button). Once a form is submitted, information filled by users will
+    be transmitted to a specified endpoints (i.e. a python function) of the web application.</p>
+
+<p>The first step is to create a view that generates an HTML form:</p>
+
+<textarea class=code_no_line_numbers>
+@app.route("/")
+def generate_form():
+    html_code = """<form action="/form_handler" method="post">
+        <input name="task_text" type="text" placeholder="enter what you want to do"/>
+        <input type="submit"/>
+    </form>"""
+    return html_code
+</textarea>
+
+<p><i>generate_form</i> will display a form containing a text field and a submit button. When a user enter some text and
+    click on the <b>submit</b> button, the data entered in the text field will be transmitted to another python, <i>form_handler</i>,
+    which will be in charge of processing what the data entered in the form.</p>
+
+<p>Let's now code a view identified by the <i>form_handler</i> URL: this view will process data entered by the user.
+    This function will check the parameters contained in the incoming request, extract a task that the user typed, and
+    display the task as a result.</p>
+
+<textarea class=code_no_line_numbers>
+@app.route("/form_handler", methods=["POST"])
+def form_handler():
+    task_text = request.form["task_text"]
+    return "You entered \"%s\"" % task_text
+            </textarea>
+
+<p>Now, after running the web application, access the <b>/</b> URL. You should get access to the following page:</p>
+<img style="height: 400px;" src="assets/chapter2/chapter2_simpleform.png"/>
+
+<p>Enter some text in the text field and click on the <b>Submit</b> button. You should land on the following page:</p>
+<img style="height: 400px;" src="assets/chapter2/chapter2_simpleresponse.png"/>
+
+<h3>II- Generating hypertext links to views and redirecting users</h3>
+<h4>A- Generating hypertext links</h4>
+<p>In HTML, creating an hypertext link a web application's endpoint is done using the &lt;a&gt; tag and specifying an URL in its
+    <b>href</b> property. Here are few example of HTML links:</p>
+<textarea class=code_no_line_numbers>
+<a href="/index.html">absolute link</a>
+<a href="../chapter1/index.html">relative link</a>
+<a href="google.fr">link to google</a>
+</textarea>
+
+<p>Flask provides the <b>url_for</b> helper to generate URL to endpoints, the <i>url_for</i> function, which takes the name of a view as a parameter, and returns an URL to the view. The following snippet illustrates how to use it:</p>
+<textarea class=code_no_line_numbers>
+from flask import url_for
+
+@app.route("/")from flask import request, url_for, make_response, redirect
+def generate_form():
+    html_code = """<form action="%s" method="post">
+        <input name="task_text" type="text" placeholder="enter what you want to do"/>
+        <input type="submit"/>
+    </form>""" % (url_for("form_handler"))
+    return html_code
+</textarea>
+
+<p>You can complete the generated link with arguments by adding these arguments to the <b>url_form</b> as in the following example:</p>
+<textarea class=code_no_line_numbers>
+url_for("hello_name_age", firstname="Jonathan", lastname="Pastor", age=30)
+</textarea>
+
+<h4>B- Redirecting users</h4>
+
+After the execution of a view, it is possible to redirect a user to another view by using the <b>redirect</b> mecanism, as in the following example:
+<textarea class=code_no_line_numbers>
+from flask import redirect
+
+@app.route("/form_handler", methods=["POST"])
+def form_handler():
+    task_text = request.form["task_text"]
+    response = redirect(url_for("generate_form"))
+</textarea>
+
+<p>Now, after entering a value, the user should be redirected to the view that generates the HTML form.</p>
+
+<h3>III- Introduction to cookies</h3>
+
+<p>A <a href="https://en.wikipedia.org/wiki/HTTP_cookie">cookie</a> is an information that a website stores on the user's computer.</p>
+
+<p>To store a cookie in the user's computer, we can use the <b>session</b> mechanism provided by Flask, which provides an high level API for manipulating cookies.</p>
+
+<p>First, import the session mechanism from Flask and set an application password (it will be used to encrypt cookies):</p>
+<textarea class=code_no_line_numbers>
+from flask import session
+app.secret_key = "very_secret_secret"
+</textarea>
+
+<p>Now, you can set cookies by manipulating the <b>session</b> object as a dictionary:</p>
+<textarea class=code_no_line_numbers>
+@app.route("/increment")
+def increment_counter():
+    if "count" in session:
+        session["count"] = "%i" % (int(session["count"]) + 1)
+    else:
+        session["count"] = "1"
+    return session["count"]
+</textarea>
+
+<h3>V- Summary</h3>
+<p>The following code summarizes what has been shown in this chapter:</p>
+<textarea class=code>
+from flask import Flask
+from flask import request, url_for, redirect, session
+app = Flask("firstFormApplication")
+app.secret_key = "very_important_secret"
+
+
+@app.route("/")
+def generate_form():
+
+    html_code = """<form action="%s" method="post">
+        <input name="task_text" type="text" placeholder="enter what you want to do"/>
+        <input type="submit"/>
+    </form>""" % (url_for("form_handler"))
+
+    if "tasks" in session:
+        html_code += "<ul>"
+        for task in session['tasks'].split(":"):
+            html_code += "<li>%s</li>" % (task)
+        html_code += "</ul>"
+
+    return html_code
+
+
+@app.route("/form_handler", methods=["POST"])
+def form_handler():
+    task_text = request.form["task_text"]
+    if "tasks" not in session:
+        session["tasks"] = task_text
+    else:
+        session["tasks"] = task_text+":"+session['tasks']
+    return redirect(url_for("generate_form"))
+
+if __name__ == "__main__":
+    app.jinja_env.auto_reload = True
+    app.run(host="0.0.0.0", port=8080, debug=True)
+</textarea>
+
+</div>
+<script>
+
+            $.map( $(".code"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "python",
+                           version: 3,
+                           singleLineStringErrors: false},
+                    lineNumbers: true,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".code_no_line_numbers"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "python",
+                           version: 3,
+                           singleLineStringErrors: false},
+                    lineNumbers: false,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+
+</script>
+</body>
+</html>

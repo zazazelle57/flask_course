@@ -1,0 +1,12 @@
+body {
+    padding: 15px;
+    background-color: #EEEEEE;
+}
+
+.main-div {
+    margin: auto;
+}
+
+.delete-link {
+    floating: right;
+}

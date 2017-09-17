@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todolist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+</head>
+<body>
+<div id="container">
+    <div class="row">
+        <div class="col-md-6 main-div">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Todos</h1>
+                    <form action="{{ url_for('form_handler') }}" method="post">
+                        <div class="form-group">
+                            <input class="form-control" name="task_text" type="text" placeholder="Add todo"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="btn btn-success float-right" type="submit"/>
+                      </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for task in tasks %}
+                        <li class="list-group-item">{{ task }} <a class="float-right" href="#">delete</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
