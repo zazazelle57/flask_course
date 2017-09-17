@@ -1,0 +1,379 @@
+<p>
+<head>
+    <meta charset="ISO-8859-1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <link rel=stylesheet href="http://codemirror.net/lib/codemirror.css">
+    <!--<link rel=stylesheet href="http://codemirror.net/doc/docs.css">-->
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/mode/xml/xml.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+    <script src="http://codemirror.net/mode/css/css.js"></script>
+    <script src="http://codemirror.net/mode/python/python.js"></script>
+    <script src="http://codemirror.net/mode/jinja2/jinja2.js"></script>
+    <script src="https://codemirror.net/mode/css/css.js"></script>
+    <script src="http://codemirror.net/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <style>
+            body {
+              padding-top: 2rem;
+              padding-bottom: 2rem;
+            }
+
+            h3 {
+              margin-top: 2rem;
+            }
+
+            .row {
+              margin-bottom: 1rem;
+            }
+            .row .row {
+              margin-top: 1rem;
+              margin-bottom: 0;
+            }
+            [class*="col-"] {
+              padding-top: 1rem;
+              padding-bottom: 1rem;
+              background-color: rgba(86,61,124,.15);
+              border: 1px solid rgba(86,61,124,.2);
+            }
+
+            hr {
+              margin-top: 2rem;
+              margin-bottom: 2rem;
+            }
+
+            .CodeMirror {
+                height: auto;
+            }
+
+            .CodeMirror-scroll {
+                height: auto;
+            }
+
+            p {
+                margin-top: 0;
+                margin-bottom: 1rem;
+            }
+
+    </style>
+</head>
+<a>
+<p id="container">
+<h1>Chapter 4 - Using a database with Flask </h1>
+<h2>Configuring a database, introduction to model classes, querying objects from the database and setting up relationships between model classes.</h2>
+
+<h3>I- Configuring a database</h3>
+<p>Object oriented programming and relational database view data in different ways. An ORM (<a href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a glue that makes the link between the object oriented world and the relational database world. In the ORM model, model classes are defined where, usually, each one of them maps a specific relational table.</p>
+
+<p>This chapter will cover how to integrate Flask with <a href="https://www.sqlalchemy.org/">SQLAlchemy</a>, the most famous python ORM. Before proceeding, install the SQLAlchemy plugin for Flask, by running the following in a Unix terminal:</p>
+<p><code>pip install Flask-SQLAlchemy==2.1</code></p>
+
+<p>Now, create a <span class="badge badge-primary">database.py</span> script that will contain database configuration and model classes' definitions:</p>
+
+<textarea class="code_no_line_numbers">
+from flask_sqlalchemy import SQLAlchemy
+from server import app
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+db = SQLAlchemy(app)
+</textarea>
+
+<p>Now, modify the existing <span class="badge badge-primary">server.py</span> file so that it creates the database at startup:</p>
+
+<textarea class=code_no_line_numbers>
+if __name__ == "__main__":
+    # Create the DB
+    from database import db
+    print("creating database")
+    db.create_all()
+    print("database created")
+</textarea>
+
+<h3>II- Introduction to model classes</h3>
+<p>Object oriented programming and relational database view data in different ways. An ORM (<a href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a glue that makes the link between the object oriented world and the relational database world. In the ORM model, model classes are defined where, usually, each one of them maps a specific relational table. In this section, we will modelize the following class:</p>
+<img style="height: 200px;" src="assets/chapter4/chapter4_umlSingleClass.png" />
+
+<p>To get started with model classes, open the <span class="badge badge-primary">database.py</span> file and add the following definition of a task:</p>
+
+<textarea class="code_no_line_numbers">
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.Text)
+    isDone = db.Column(db.Boolean)
+</textarea>
+
+<p>Now, restart the script and modify the code of <span class="badge badge-primary">server.py</span> to make it store data in database instead of using sessions:</p>
+<textarea class="code_no_line_numbers">
+@app.route("/")
+def generate_form():
+    from database import Task
+    tasks = Task.query.all() # Get all the tasks stored in database
+    return render_template("form.html", tasks=tasks)
+
+
+@app.route("/form_handler", methods=["POST"])
+def form_handler():
+    from database import Task
+    task_text = request.form["task_text"]
+
+    new_task = Task() # Create a new task locally
+    new_task.label = task_text # set the text of the task
+    new_task.isDone = False # set the isDone boolean
+
+    # Add the new task to the current DB session.
+    # Once the execution of the DB session is over,
+    # the new task will be present in the database.
+    db.session.add(new_task)
+    return redirect(url_for("generate_form"))
+</textarea>
+
+<p>And update the <span class="badge badge-primary">templates/form.html</span> template, to take into account the new data modelization of tasks:</p>
+
+<textarea class=jinja2_code_no_line_numbers>
+{% for task in tasks %}
+<li class="list-group-item">{{ task.label }} <a class="float-right" href="#">delete</a></li>
+{% endfor %}
+</textarea>
+
+<h3>III- Querying database objects</h3>
+
+<p>It is possible to read, update and delete objects from database directly from a model class. The following piece of code illustrates few examples of database querying using Flask (more details <a href="http://flask-sqlalchemy.pocoo.org/2.1/queries/">here</a>):</p>
+<textarea class=code_no_line_numbers>
+from database import Task
+
+Task.query.all() # gets a list containing all the tasks from database. If database is empty, returns []
+Task.query.first() # returns an task from database. If database is empty, returns None
+
+Task.filter(Task.id == 1).first() # returns the task whose ID value is equal to 1. If there is no result, returns none
+Task.filter_by(id=1).first() # same as previous query
+
+Task.filter_by(isDone=False).all() # returns all the tasks that are not done. If no result, returns []
+</textarea>
+
+
+<h3>IV- Relationships</h3>
+
+<p>It is possible setup links between model classes, by using the <b>relationship</b> concept. In this section, we will modelize the following relationship:</p>
+<img style="height: 200px;" src="assets/chapter4/chapter4_umlRelationship.png" />
+
+<p>Let's add a new model class in our web application: to do so, apply the following modifications to <span class="badge badge-primary">database.py</span>:</p>
+<textarea class=code_no_line_numbers>
+class TaskList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    owner = db.Column(db.Text)
+    tasks = db.relationship('Task', backref='task_list', lazy='dynamic')
+
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.Text)
+    isDone = db.Column(db.Boolean)
+    task_list_id = db.Column(db.Integer, db.ForeignKey('task_list.id'))
+</textarea>
+
+<h3>V- Towards a complete task manager</h3>
+<p>In this section, we will complete the existing application so that it can handle several task list. Please take a look a the modification we made to the existing code.</p>
+
+<p><span class="badge badge-primary">server.py</span>:</p>
+<textarea class=code>
+from flask import Flask
+from flask import request, url_for, redirect, session, render_template
+app = Flask("firstFormApplication")
+app.secret_key = "very_important_secret"
+
+
+@app.route("/")
+@app.route("/<task_list_name>")
+def generate_form(task_list_name=None):
+    from database import Task, TaskList
+    # If no "task_list_name" parameter is provided, redirect to "default"
+    if task_list_name is None:
+        return redirect(url_for("generate_form", task_list_name="default"))
+    existing_task_list = TaskList.query.filter_by(name=task_list_name).first()
+    # If no existing task list, then create a new one
+    if existing_task_list is None:
+        new_task_list = TaskList()
+        new_task_list.name = task_list_name
+        db.session.add(new_task_list)
+        db.session.commit()
+        existing_task_list = new_task_list
+    # Render the form usign the current task list
+    return render_template("form.html", task_list=existing_task_list)
+
+
+@app.route("/form_handler", methods=["POST"])
+def form_handler():
+    from database import Task
+    task_list_id = request.form["task_list_id"]
+    task_list_name = request.form["task_list_name"]
+    task_text = request.form["task_text"]
+
+    # Create a new task
+    new_task = Task()
+    new_task.label = task_text
+    new_task.isDone = False
+    new_task.task_list_id = task_list_id # Make the link between Task and TaskList
+
+    db.session.add(new_task)
+    db.session.commit()
+
+    return redirect(url_for("generate_form", task_list_name=task_list_name))
+
+if __name__ == "__main__":
+    # Create the DB
+    from database import db
+    print("creating database")
+    db.create_all()
+    print("database created")
+    app.jinja_env.auto_reload = True
+    app.run(host="0.0.0.0", port=8080, debug=True)
+
+</textarea>
+<p></p>
+
+<p><span class="badge badge-primary">templates/form.html</span>:</p>
+<textarea class=jinja2_code>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todolist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+</head>
+<body>
+<div id="container">
+    <div class="row">
+        <div class="col-md-6 main-div">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>{{ task_list.name }}</h1>
+                    <form action="{{ url_for('form_handler') }}" method="post">
+                        <div class="form-group">
+                            <input class="form-control" name="task_text" type="text" placeholder="Add todo"/>
+                            <input type="hidden" name="task_list_id" value="{{ task_list.id }}"/>
+                            <input type="hidden" name="task_list_name" value="{{ task_list.name }}"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="btn btn-success float-right" type="submit"/>
+                      </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for task in task_list.tasks %}
+                        <li class="list-group-item">{{ task.label }} <a class="float-right" href="#">delete</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+</textarea>
+
+</div>
+<script>
+
+            $.map( $(".code"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "python",
+                           version: 3,
+                           singleLineStringErrors: false},
+                    lineNumbers: true,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".code_no_line_numbers"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "python",
+                           version: 3,
+                           singleLineStringErrors: false},
+                    lineNumbers: false,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".jinja2_code_no_line_numbers"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "jinja2",
+                           vhtmlMode: true},
+                    lineNumbers: false,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".jinja2_code"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "jinja2",
+                           vhtmlMode: true},
+                    lineNumbers: true,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".css_code_no_line_numbers"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "css",
+                           vhtmlMode: true},
+                    lineNumbers: false,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".css_code"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "jinja2",
+                           vhtmlMode: true},
+                    lineNumbers: true,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".html_code_no_line_numbers"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "htmlmixed"},
+                    lineNumbers: false,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+            $.map( $(".html_code"), function(code_tag) {
+                var editor = CodeMirror.fromTextArea(code_tag, {
+                    mode: {name: "htmlmixed"},
+                    lineNumbers: true,
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly: true
+                });
+            });
+
+
+</script>
+</body>
+</html>
