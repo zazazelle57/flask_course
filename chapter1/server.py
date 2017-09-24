@@ -4,9 +4,7 @@ app = Flask("helloworldApplication")
 
 @app.route("/")
 def hello():
-    print url_for("hello_name_age", firstname="Jonathan", lastname="Pastor", age=30)
     return "Hello World!"
-
 
 @app.route("/hello/<firstname>/<lastname>/<int:age>")
 def hello_name_age(firstname, lastname, age):

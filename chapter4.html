@@ -61,7 +61,6 @@
                 margin-top: 0;
                 margin-bottom: 1rem;
             }
-
     </style>
 </head>
 <a>
@@ -70,12 +69,12 @@
 <h2>Configuring a database, introduction to model classes, querying objects from the database and setting up relationships between model classes.</h2>
 
 <h3>I- Configuring a database</h3>
-<p>Object oriented programming and relational database view data in different ways. An ORM (<a href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a glue that makes the link between the object oriented world and the relational database world. In the ORM model, model classes are defined where, usually, each one of them maps a specific relational table.</p>
+<p>Object oriented programming and relational database view data in different ways. An ORM (<a href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a mechanism that makes the link between the object oriented and the relational database approaches. When using an ORM, model classes are defined for, usually, mapping each of the relational tables.</p>
 
 <p>This chapter will cover how to integrate Flask with <a href="https://www.sqlalchemy.org/">SQLAlchemy</a>, the most famous python ORM. Before proceeding, install the SQLAlchemy plugin for Flask, by running the following in a Unix terminal:</p>
 <p><code>pip install Flask-SQLAlchemy==2.1</code></p>
 
-<p>Now, create a <span class="badge badge-primary">database.py</span> script that will contain database configuration and model classes' definitions:</p>
+<p>Now, create a <span class="badge badge-primary">database.py</span> script that will contain the database configuration and model classes' definitions:</p>
 
 <textarea class="code_no_line_numbers">
 from flask_sqlalchemy import SQLAlchemy
@@ -85,7 +84,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 </textarea>
 
-<p>Now, modify the existing <span class="badge badge-primary">server.py</span> file so that it creates the database at startup:</p>
+<p>Now, modify the existing <span class="badge badge-primary">server.py</span> so that it creates the database at startup:</p>
 
 <textarea class=code_no_line_numbers>
 if __name__ == "__main__":
@@ -97,7 +96,7 @@ if __name__ == "__main__":
 </textarea>
 
 <h3>II- Introduction to model classes</h3>
-<p>Object oriented programming and relational database view data in different ways. An ORM (<a href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a glue that makes the link between the object oriented world and the relational database world. In the ORM model, model classes are defined where, usually, each one of them maps a specific relational table. In this section, we will modelize the following class:</p>
+<p>In the ORM model, model classes are usually an object oriented equivalent to a relational table. In this section, we will modelize the following class:</p>
 <img style="height: 200px;" src="assets/chapter4/chapter4_umlSingleClass.png" />
 
 <p>To get started with model classes, open the <span class="badge badge-primary">database.py</span> file and add the following definition of a task:</p>
@@ -180,7 +179,7 @@ class Task(db.Model):
 </textarea>
 
 <h3>V- Towards a complete task manager</h3>
-<p>In this section, we will complete the existing application so that it can handle several task list. Please take a look a the modification we made to the existing code.</p>
+<p>In this section, we will complete the existing application so that it can handle several task list. Please take a look a the modifications we made to the existing code.</p>
 
 <p><span class="badge badge-primary">server.py</span>:</p>
 <textarea class=code>

@@ -20,7 +20,7 @@ def generate_form(task_list_name=None):
         db.session.commit()
         existing_task_list = new_task_list
     # Render the form usign the current task list
-    return render_template("form.html", task_list=existing_task_list)
+    return render_template("tasks_template.html", task_list=existing_task_list)
 
 
 @app.route("/form_handler", methods=["POST"])

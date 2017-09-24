@@ -9,7 +9,7 @@ def generate_form():
     tasks = []
     if "tasks" in session:
         tasks = session["tasks"].split(":")
-    return render_template("form.html", tasks=tasks)
+    return render_template("simple_form.html", tasks=tasks)
 
 
 @app.route("/form_handler", methods=["POST"])

@@ -85,12 +85,12 @@ def generate_form():
     return html_code
 </textarea>
 
-<p><i>generate_form</i> will display a form containing a text field and a submit button. When a user enter some text and
-    click on the <b>submit</b> button, the data entered in the text field will be transmitted to another python, <i>form_handler</i>,
-    which will be in charge of processing what the data entered in the form.</p>
+<p><i>generate_form</i> will display a form containing a text field and a submit button. When a user enters some text and
+    clicks on the <b>submit</b> button, the data entered in the text field is transmitted to another view (<i>form_handler</i>),
+    which will be in charge of processing the data entered in the form.</p>
 
-<p>Let's now code a view identified by the <i>form_handler</i> URL: this view will process data entered by the user.
-    This function will check the parameters contained in the incoming request, extract a task that the user typed, and
+<p>Let's now create a view that is in charge of processing data from the previous form: it will be accessible via the <i>form_handler</i> URL.
+    This function will check the information provided by the incoming request, extract a task from this information, and
     display the task as a result.</p>
 
 <textarea class=code_no_line_numbers>
@@ -108,7 +108,7 @@ def form_handler():
 
 <h3>II- Generating hypertext links to views and redirecting users</h3>
 <h4>A- Generating hypertext links</h4>
-<p>In HTML, creating an hypertext link a web application's endpoint is done using the &lt;a&gt; tag and specifying an URL in its
+<p>In HTML, creating an hypertext link to a web application's endpoint is made by using the <u>&lt;a&gt;</u> tag and by specifying an URL in its
     <b>href</b> property. Here are few example of HTML links:</p>
 <textarea class=code_no_line_numbers>
 <a href="/index.html">absolute link</a>
@@ -116,7 +116,7 @@ def form_handler():
 <a href="google.fr">link to google</a>
 </textarea>
 
-<p>Flask provides the <b>url_for</b> helper to generate URL to endpoints, the <i>url_for</i> function, which takes the name of a view as a parameter, and returns an URL to the view. The following snippet illustrates how to use it:</p>
+<p>Flask provides the <b>url_for</b> helper to generate URL to endpoints: it takes the name of a view as a parameter, and returns an URL to the view. The following snippet illustrates how to use it:</p>
 <textarea class=code_no_line_numbers>
 from flask import url_for
 
@@ -136,7 +136,7 @@ url_for("hello_name_age", firstname="Jonathan", lastname="Pastor", age=30)
 
 <h4>B- Redirecting users</h4>
 
-After the execution of a view, it is possible to redirect a user to another view by using the <b>redirect</b> mecanism, as in the following example:
+After the execution of a view, it is possible to redirect an user to another view by using the <b>redirect</b> function, as in the following example:
 <textarea class=code_no_line_numbers>
 from flask import redirect
 
@@ -146,13 +146,13 @@ def form_handler():
     response = redirect(url_for("generate_form"))
 </textarea>
 
-<p>Now, after entering a value, the user should be redirected to the view that generates the HTML form.</p>
+<p>Now, after submitting the form, the user should be redirected back to the view that generates the HTML form.</p>
 
 <h3>III- Introduction to cookies</h3>
 
-<p>A <a href="https://en.wikipedia.org/wiki/HTTP_cookie">cookie</a> is an information that a website stores on the user's computer.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/HTTP_cookie">cookie</a> is an information stores by a website on the user's computer.</p>
 
-<p>To store a cookie in the user's computer, we can use the <b>session</b> mechanism provided by Flask, which provides an high level API for manipulating cookies.</p>
+<p>With Flask, to store a cookie in the user's computer, one should use the <b><a href="http://flask.pocoo.org/docs/0.12/quickstart/#sessions">session</a></b> mechanism, which provides a high level API for manipulating cookies.</p>
 
 <p>First, import the session mechanism from Flask and set an application password (it will be used to encrypt cookies):</p>
 <textarea class=code_no_line_numbers>
@@ -160,7 +160,7 @@ from flask import session
 app.secret_key = "very_secret_secret"
 </textarea>
 
-<p>Now, you can set cookies by manipulating the <b>session</b> object as a dictionary:</p>
+<p>Now, you can set cookies by manipulating the <i>session</i> object as a dictionary:</p>
 <textarea class=code_no_line_numbers>
 @app.route("/increment")
 def increment_counter():

@@ -70,7 +70,7 @@
 <h2><i>Creating Web templates, adding assets to the application, and prettify the application using <a href="http://getbootstrap.com/">Bootstrap.</a></i></h2>
 
 <h3>I- Templates</h3>
-<h4>Quick introduction to Jinja templates</h4>
+<h4>A- Quick introduction to Jinja templates</h4>
 
 <p>A <a href="https://en.wikipedia.org/wiki/Web_template_system">template</a> is a file that can be used as a basis to generate files such as configuration files or source code files.</p>
 
@@ -122,11 +122,11 @@
 </ul>
 </p>
 
-<h4>Using templates</h4>
+<h4>B- Using templates</h4>
 
 <p>Create a <span class="badge badge-primary">templates</span> folder: it will contain all the templates of the application. Copy the template from Section I-A in <span class="badge badge-primary">templates</span>.</p>
 
-<p>Let's now generate a view that will use this template. To do so, replace the <i>generate_form</i> function (from chapter 2) by the following:</p>
+<p>Let's now generate a view that will use this template. To do so, replace the <i>generate_form</i> function (from chapter 2) by the following code:</p>
 
 <textarea class=code_no_line_numbers>
 from flask import request, url_for, redirect, session, render_template
@@ -141,7 +141,7 @@ def generate_form():
 
 <h3>II- Adding assets to the application</h3>
 
-<p>Assets files are files that are used by the browser in addition to the HTML code that is being interpreted. They can be images, CSS stylesheets or Javascript files.</p>
+<p>Assets files are files that are used by the browser in addition to the HTML code that is interpreted by a web browser. They can be images, CSS stylesheets or Javascript files.</p>
 
 <p>In Flask, they are stored in the <b>static</b> folder. Create a <span class="badge badge-primary">static</span> folder in your project, and then add three folders in the static folder: <ul>
     <li><span class="badge badge-primary">css</span></li>
@@ -176,9 +176,9 @@ body {
 
 <h3>III- Using the Bootstrap CSS framework</h3>
 
-<p>Bootstrap is a convenient CSS framework that proposes some CSS styling that enables to ease the development of nice a web site.</p>
+<p><a href="https://getbootstrap.com/">Bootstrap</a> is a convenient CSS framework that proposes some CSS styling, which enables an easier development of nice a web site.</p>
 
-<p>To use Bootstrap, you have to add a css file and js file. To proceed, go to <a href="https://getbootstrap.com/docs/4.0/getting-started/download/">https://getbootstrap.com/docs/4.0/getting-started/download/</a>, and Download the <b>Compiled CSS and JS</b> version of bootstrap. Extract the archive, and do the following:
+<p>To use Bootstrap, you have to add a css file and js file to the existing project. To proceed, go to <a href="https://getbootstrap.com/docs/4.0/getting-started/download/">https://getbootstrap.com/docs/4.0/getting-started/download/</a>, and Download the <b><i>Compiled</i> CSS and JS</b> version of bootstrap. Extract the archive, and do the following:
 <ul>
     <li>Copy <span class="badge badge-primary">css/bootstrap.css</span> into <span class="badge badge-primary">assets/css/bootstrap.css</span></li>
     <li>Copy <span class="badge badge-primary">css/bootstrap.js</span> into <span class="badge badge-primary">assets/js/bootstrap.js</span></li>
@@ -227,46 +227,6 @@ body {
 
 <p>The application should be close to what is depicted in the following screenshot:</p>
 <img style="height: 400px;" src="assets/chapter3/chapter3_bootstrap.png"/>
-
-<h3>V- Summary</h3>
-<p>The following code summarizes what has been shown in this chapter:</p>
-<textarea class=code>
-from flask import Flask
-from flask import request, url_for, redirect, session
-app = Flask("firstFormApplication")
-app.secret_key = "very_important_secret"
-
-
-@app.route("/")
-def generate_form():
-
-    html_code = """<form action="%s" method="post">
-        <input name="task_text" type="text" placeholder="enter what you want to do"/>
-        <input type="submit"/>
-    </form>""" % (url_for("form_handler"))
-
-    if "tasks" in session:
-        html_code += "<ul>"
-        for task in session['tasks'].split(":"):
-            html_code += "<li>%s</li>" % (task)
-        html_code += "</ul>"
-
-    return html_code
-
-
-@app.route("/form_handler", methods=["POST"])
-def form_handler():
-    task_text = request.form["task_text"]
-    if "tasks" not in session:
-        session["tasks"] = task_text
-    else:
-        session["tasks"] = task_text+":"+session['tasks']
-    return redirect(url_for("generate_form"))
-
-if __name__ == "__main__":
-    app.jinja_env.auto_reload = True
-    app.run(host="0.0.0.0", port=8080, debug=True)
-</textarea>
 
 </div>
 <script>
