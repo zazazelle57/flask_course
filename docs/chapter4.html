@@ -1,9 +1,10 @@
-<p>
+<html>
 <head>
     <meta charset="ISO-8859-1">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+          crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
             integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
             crossorigin="anonymous"></script>
@@ -17,64 +18,40 @@
     <script src="js/python.js"></script>
     <script src="js/htmlmixed.js"></script>
     <script src="js/matchbrackets.js"></script>
+    <script src="js/jinja2.js"></script>
 
-    <style>
-            body {
-              padding-top: 2rem;
-              padding-bottom: 2rem;
-            }
-
-            h3 {
-              margin-top: 2rem;
-            }
-
-            .row {
-              margin-bottom: 1rem;
-            }
-            .row .row {
-              margin-top: 1rem;
-              margin-bottom: 0;
-            }
-            [class*="col-"] {
-              padding-top: 1rem;
-              padding-bottom: 1rem;
-              background-color: rgba(86,61,124,.15);
-              border: 1px solid rgba(86,61,124,.2);
-            }
-
-            hr {
-              margin-top: 2rem;
-              margin-bottom: 2rem;
-            }
-
-            .CodeMirror {
-                height: auto;
-            }
-
-            .CodeMirror-scroll {
-                height: auto;
-            }
-
-            p {
-                margin-top: 0;
-                margin-bottom: 1rem;
-            }
-    </style>
+    <link rel="stylesheet" href="css/course.css">
 </head>
-<a>
-<p id="container">
-<h1>Chapter 4 - Using a database with Flask </h1>
-<h2>Configuring a database, introduction to model classes, querying objects from the database and setting up relationships between model classes.</h2>
+<body>
+<div id="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-10 main-content">
 
-<h3>I- Configuring a database</h3>
-<p>Object oriented programming and relational database view data in different ways. An ORM (<a href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a mechanism that makes the link between the object oriented and the relational database approaches. When using an ORM, model classes are defined for, usually, mapping each of the relational tables.</p>
+            <h1>Chapter 4 - Using a database with Flask </h1>
+            <h4>Configuring a database, introduction to model classes, querying objects from the database and
+                setting up relationships between model classes.</h4>
 
-<p>This chapter will cover how to integrate Flask with <a href="https://www.sqlalchemy.org/">SQLAlchemy</a>, the most famous python ORM. Before proceeding, install the SQLAlchemy plugin for Flask, by running the following in a Unix terminal:</p>
-<p><code>pip install Flask-SQLAlchemy==2.1</code></p>
+            <h3>I- Configuring a database</h3>
+            <p>Object oriented programming and relational database view data in different ways. An ORM (<a
+                    href="https://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a>) is a
+                mechanism
+                that makes the link between the object oriented and the relational database approaches. When using an
+                ORM, model
+                classes are defined for, usually, mapping each of the relational tables.</p>
 
-<p>Now, create a <span class="badge badge-primary">database.py</span> script that will contain the database configuration and model classes' definitions:</p>
+            <p>This chapter will cover how to integrate Flask with <a href="https://www.sqlalchemy.org/">SQLAlchemy</a>,
+                the most
+                famous python ORM. Before proceeding, install the SQLAlchemy plugin for Flask, by running the following
+                in a Unix
+                terminal:</p>
+            <p><code>pip install Flask-SQLAlchemy==2.1</code></p>
 
-<textarea class="code_no_line_numbers">
+            <p>Now, create a <span class="badge badge-primary">database.py</span> script that will contain the database
+                configuration and model classes' definitions:</p>
+
+            <textarea class="code_no_line_numbers">
 from flask_sqlalchemy import SQLAlchemy
 from server import app
 
@@ -82,9 +59,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 </textarea>
 
-<p>Now, modify the existing <span class="badge badge-primary">server.py</span> so that it creates the database at startup:</p>
+            <p>Now, modify the existing <span class="badge badge-primary">server.py</span> so that it creates the
+                database at
+                startup:</p>
 
-<textarea class=code_no_line_numbers>
+            <textarea class=code_no_line_numbers>
 if __name__ == "__main__":
     # Create the DB
     from database import db
@@ -93,21 +72,27 @@ if __name__ == "__main__":
     print("database created")
 </textarea>
 
-<h3>II- Introduction to model classes</h3>
-<p>In the ORM model, model classes are usually an object oriented equivalent to a relational table. In this section, we will modelize the following class:</p>
-<img style="height: 200px;" src="assets/chapter4/chapter4_umlSingleClass.png" />
+            <h3>II- Introduction to model classes</h3>
+            <p>In the ORM model, model classes are usually an object oriented equivalent to a relational table. In this
+                section, we
+                will modelize the following class:</p>
+            <img style="height: 200px;" src="assets/chapter4/chapter4_umlSingleClass.png"/>
 
-<p>To get started with model classes, open the <span class="badge badge-primary">database.py</span> file and add the following definition of a task:</p>
+            <p>To get started with model classes, open the <span class="badge badge-primary">database.py</span> file and
+                add the
+                following definition of a task:</p>
 
-<textarea class="code_no_line_numbers">
+            <textarea class="code_no_line_numbers">
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.Text)
     isDone = db.Column(db.Boolean)
 </textarea>
 
-<p>Now, restart the script and modify the code of <span class="badge badge-primary">server.py</span> to make it store data in database instead of using sessions:</p>
-<textarea class="code_no_line_numbers">
+            <p>Now, restart the script and modify the code of <span class="badge badge-primary">server.py</span> to make
+                it store
+                data in database instead of using sessions:</p>
+            <textarea class="code_no_line_numbers">
 @app.route("/")
 def generate_form():
     from database import Task
@@ -131,18 +116,23 @@ def form_handler():
     return redirect(url_for("generate_form"))
 </textarea>
 
-<p>And update the <span class="badge badge-primary">templates/form.html</span> template, to take into account the new data modelization of tasks:</p>
+            <p>And update the <span class="badge badge-primary">templates/form.html</span> template, to take into
+                account the new
+                data modelization of tasks:</p>
 
-<textarea class=jinja2_code_no_line_numbers>
+            <textarea class=jinja2_code_no_line_numbers>
 {% for task in tasks %}
 <li class="list-group-item">{{ task.label }} <a class="float-right" href="#">delete</a></li>
 {% endfor %}
 </textarea>
 
-<h3>III- Querying database objects</h3>
+            <h3>III- Querying database objects</h3>
 
-<p>It is possible to read, update and delete objects from database directly from a model class. The following piece of code illustrates few examples of database querying using Flask (more details <a href="http://flask-sqlalchemy.pocoo.org/2.1/queries/">here</a>):</p>
-<textarea class=code_no_line_numbers>
+            <p>It is possible to read, update and delete objects from database directly from a model class. The
+                following piece of
+                code illustrates few examples of database querying using Flask (more details <a
+                        href="http://flask-sqlalchemy.pocoo.org/2.1/queries/">here</a>):</p>
+            <textarea class=code_no_line_numbers>
 from database import Task
 
 Task.query.all() # gets a list containing all the tasks from database. If database is empty, returns []
@@ -155,13 +145,16 @@ Task.filter_by(isDone=False).all() # returns all the tasks that are not done. If
 </textarea>
 
 
-<h3>IV- Relationships</h3>
+            <h3>IV- Relationships</h3>
 
-<p>It is possible setup links between model classes, by using the <b>relationship</b> concept. In this section, we will modelize the following relationship:</p>
-<img style="height: 200px;" src="assets/chapter4/chapter4_umlRelationship.png" />
+            <p>It is possible setup links between model classes, by using the <b>relationship</b> concept. In this
+                section, we will
+                modelize the following relationship:</p>
+            <img style="height: 200px;" src="assets/chapter4/chapter4_umlRelationship.png"/>
 
-<p>Let's add a new model class in our web application: to do so, apply the following modifications to <span class="badge badge-primary">database.py</span>:</p>
-<textarea class=code_no_line_numbers>
+            <p>Let's add a new model class in our web application: to do so, apply the following modifications to <span
+                    class="badge badge-primary">database.py</span>:</p>
+            <textarea class=code_no_line_numbers>
 class TaskList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
@@ -176,11 +169,13 @@ class Task(db.Model):
     task_list_id = db.Column(db.Integer, db.ForeignKey('task_list.id'))
 </textarea>
 
-<h3>V- Towards a complete task manager</h3>
-<p>In this section, we will complete the existing application so that it can handle several task list. Please take a look a the modifications we made to the existing code.</p>
+            <h3>V- Towards a complete task manager</h3>
+            <p>In this section, we will complete the existing application so that it can handle several task list.
+                Please take a
+                look a the modifications we made to the existing code.</p>
 
-<p><span class="badge badge-primary">server.py</span>:</p>
-<textarea class=code>
+            <p><span class="badge badge-primary">server.py</span>:</p>
+            <textarea class=code>
 from flask import Flask
 from flask import request, url_for, redirect, session, render_template
 app = Flask("firstFormApplication")
@@ -234,10 +229,10 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
 
 </textarea>
-<p></p>
+            <p></p>
 
-<p><span class="badge badge-primary">templates/form.html</span>:</p>
-<textarea class=jinja2_code>
+            <p><span class="badge badge-primary">templates/form.html</span>:</p>
+            <textarea class=jinja2_code>
 <!DOCTYPE html>
 <html>
 <head>
@@ -279,6 +274,10 @@ if __name__ == "__main__":
 </html>
 </textarea>
 
+        </div>
+        <div class="col">
+        </div>
+    </div>
 </div>
 <script>
 
@@ -369,7 +368,6 @@ if __name__ == "__main__":
                     readOnly: true
                 });
             });
-
 
 </script>
 </body>

@@ -1,9 +1,10 @@
-<p>
+<html>
 <head>
     <meta charset="ISO-8859-1">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+          crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
             integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
             crossorigin="anonymous"></script>
@@ -17,64 +18,33 @@
     <script src="js/python.js"></script>
     <script src="js/htmlmixed.js"></script>
     <script src="js/matchbrackets.js"></script>
+    <script src="js/jinja2.js"></script>
 
-    <style>
-            body {
-              padding-top: 2rem;
-              padding-bottom: 2rem;
-            }
-
-            h3 {
-              margin-top: 2rem;
-            }
-
-            .row {
-              margin-bottom: 1rem;
-            }
-            .row .row {
-              margin-top: 1rem;
-              margin-bottom: 0;
-            }
-            [class*="col-"] {
-              padding-top: 1rem;
-              padding-bottom: 1rem;
-              background-color: rgba(86,61,124,.15);
-              border: 1px solid rgba(86,61,124,.2);
-            }
-
-            hr {
-              margin-top: 2rem;
-              margin-bottom: 2rem;
-            }
-
-            .CodeMirror {
-                height: auto;
-            }
-
-            .CodeMirror-scroll {
-                height: auto;
-            }
-
-            p {
-                margin-top: 0;
-                margin-bottom: 1rem;
-            }
-
-    </style>
+    <link rel="stylesheet" href="css/course.css">
 </head>
-<a>
-<p id="container">
-<h1>Chapter 3 - Templates and assets files (CSS and Javascript)</h1>
-<h2><i>Creating Web templates, adding assets to the application, and prettify the application using <a href="http://getbootstrap.com/">Bootstrap.</a></i></h2>
+<body>
+<div id="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-10 main-content">
 
-<h3>I- Templates</h3>
-<h4>A- Quick introduction to Jinja templates</h4>
+            <h1>Chapter 3 - Templates and assets files (CSS and Javascript)</h1>
+            <h4><i>Creating Web templates, adding assets to the application, and prettify the application using <a
+                    href="http://getbootstrap.com/">Bootstrap.</a></i></h4>
 
-<p>A <a href="https://en.wikipedia.org/wiki/Web_template_system">template</a> is a file that can be used as a basis to generate files such as configuration files or source code files.</p>
+            <h3>I- Templates</h3>
+            <h4>A- Quick introduction to Jinja templates</h4>
 
-<p>Flask uses <a href="http://jinja.pocoo.org/">Jinja2</a> as a template engine. The following code illustrates how to generate an HTML file (similar to what we did in chapter2) thanks to Jinja2:</p>
+            <p>A <a href="https://en.wikipedia.org/wiki/Web_template_system">template</a> is a file that can be used as
+                a basis to
+                generate files such as configuration files or source code files.</p>
 
-<textarea class="jinja2_code_no_line_numbers">
+            <p>Flask uses <a href="http://jinja.pocoo.org/">Jinja2</a> as a template engine. The following code
+                illustrates how to
+                generate an HTML file (similar to what we did in chapter2) thanks to Jinja2:</p>
+
+            <textarea class="jinja2_code_no_line_numbers">
 <html>
     <head>
         <title>Todolist</title>
@@ -94,39 +64,48 @@
 </html>
 </textarea>
 
-<p>Jinja2 proposes two mechanisms to help developers to generate documents:
-<ul>
-    <li><a href="http://jinja.pocoo.org/docs/2.9/templates/#list-of-control-structures">Expressions</a>
-<textarea class="jinja2_code_no_line_numbers">
+            <p>Jinja2 proposes two mechanisms to help developers to generate documents:
+                <ul>
+                    <li><a href="http://jinja.pocoo.org/docs/2.9/templates/#list-of-control-structures">Expressions</a>
+                        <textarea class="jinja2_code_no_line_numbers">
     abc{{ "def" }}ghij
     {{ task }}
     {{ user.name }}
 </textarea>
-    </li>
-    <li><a href="http://jinja.pocoo.org/docs/2.9/templates/#expressions">Statements</a> <ul><li><p><a href="http://jinja.pocoo.org/docs/2.9/templates/#if">If</a></p>
-<textarea class="jinja2_code_no_line_numbers">
+                    </li>
+                    <li><a href="http://jinja.pocoo.org/docs/2.9/templates/#expressions">Statements</a>
+                        <ul>
+                            <li>
+            <p><a href="http://jinja.pocoo.org/docs/2.9/templates/#if">If</a></p>
+            <textarea class="jinja2_code_no_line_numbers">
 {% if user.connected %}
     User is connected
 {% endif %}
 </textarea>
-        </li><li><p><a href="http://jinja.pocoo.org/docs/2.9/templates/#for">For</a></p>
-<textarea class="jinja2_code_no_line_numbers">
+            </li>
+            <li><p><a href="http://jinja.pocoo.org/docs/2.9/templates/#for">For</a></p>
+                <textarea class="jinja2_code_no_line_numbers">
 {% for user in users %}
     a user
 {% endfor %}
 </textarea>
-        </li>
-    </ul></li>
-</ul>
-</p>
+            </li>
+            </ul></li>
+            </ul>
+            </p>
 
-<h4>B- Using templates</h4>
+            <h4>B- Using templates</h4>
 
-<p>Create a <span class="badge badge-primary">templates</span> folder: it will contain all the templates of the application. Copy the template from Section I-A in <span class="badge badge-primary">templates</span>.</p>
+            <p>Create a <span class="badge badge-primary">templates</span> folder: it will contain all the templates of
+                the
+                application. Copy the template from Section I-A in <span class="badge badge-primary">templates</span>.
+            </p>
 
-<p>Let's now generate a view that will use this template. To do so, replace the <i>generate_form</i> function (from chapter 2) by the following code:</p>
+            <p>Let's now generate a view that will use this template. To do so, replace the <i>generate_form</i>
+                function (from
+                chapter 2) by the following code:</p>
 
-<textarea class=code_no_line_numbers>
+            <textarea class=code_no_line_numbers>
 from flask import request, url_for, redirect, session, render_template
 
 @app.route("/")
@@ -137,18 +116,26 @@ def generate_form():
     return render_template("form.html", tasks=tasks)
 </textarea>
 
-<h3>II- Adding assets to the application</h3>
+            <h3>II- Adding assets to the application</h3>
 
-<p>Assets files are files that are used by the browser in addition to the HTML code that is interpreted by a web browser. They can be images, CSS stylesheets or Javascript files.</p>
+            <p>Assets files are files that are used by the browser in addition to the HTML code that is interpreted by a
+                web
+                browser. They can be images, CSS stylesheets or Javascript files.</p>
 
-<p>In Flask, they are stored in the <b>static</b> folder. Create a <span class="badge badge-primary">static</span> folder in your project, and then add three folders in the static folder: <ul>
-    <li><span class="badge badge-primary">css</span></li>
-    <li><span class="badge badge-primary">js</span></li>
-    <li><span class="badge badge-primary">img</span></li>
-</ul></p>
+            <p>In Flask, they are stored in the <b>static</b> folder. Create a <span
+                    class="badge badge-primary">static</span>
+                folder in your project, and then add three folders in the static folder:
+            <ul>
+                <li><span class="badge badge-primary">css</span></li>
+                <li><span class="badge badge-primary">js</span></li>
+                <li><span class="badge badge-primary">img</span></li>
+            </ul>
+            </p>
 
-<p>We will add a first asset to the web application: create a <span class="badge badge-primary">theme.css</span> file in the <span class="badge badge-primary">static</span> and fill it with the following code:</p>
-<textarea class=css_code_no_line_numbers>
+            <p>We will add a first asset to the web application: create a <span
+                    class="badge badge-primary">theme.css</span> file in
+                the <span class="badge badge-primary">static</span> and fill it with the following code:</p>
+            <textarea class=css_code_no_line_numbers>
 body {
     padding: 15px;
     background-color: #EEEEEE;
@@ -163,27 +150,41 @@ body {
 }
 </textarea>
 
-<div class="alert alert-warning" role="alert">
-    <p><strong>Warning!</strong> If you want to learn more about CSS, you can take a look at this tutorial: <a href="http://learnlayout.com/"/>learnlayout.com</a></p>
-</div>
+            <div class="alert alert-warning" role="alert">
+                <p><strong>Warning!</strong> If you want to learn more about CSS, you can take a look at this tutorial:
+                    <a
+                            href="http://learnlayout.com/"/>learnlayout.com</a></p>
+            </div>
 
-<p>Then, in the <span class="badge badge-primary">templates/form.html</span> template, add the line in the HTML header:</p>
-<textarea class=jinja2_code_no_line_numbers>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css" />
+            <p>Then, in the <span class="badge badge-primary">templates/form.html</span> template, add the line in the
+                HTML header:
+            </p>
+            <textarea class=jinja2_code_no_line_numbers>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css"/>
 </textarea>
 
-<h3>III- Using the Bootstrap CSS framework</h3>
+            <h3>III- Using the Bootstrap CSS framework</h3>
 
-<p><a href="https://getbootstrap.com/">Bootstrap</a> is a convenient CSS framework that proposes some CSS styling, which enables an easier development of nice a web site.</p>
+            <p><a href="https://getbootstrap.com/">Bootstrap</a> is a convenient CSS framework that proposes some CSS
+                styling, which
+                enables an easier development of nice a web site.</p>
 
-<p>To use Bootstrap, you have to add a css file and js file to the existing project. To proceed, go to <a href="https://getbootstrap.com/docs/4.0/getting-started/download/">https://getbootstrap.com/docs/4.0/getting-started/download/</a>, and Download the <b><i>Compiled</i> CSS and JS</b> version of bootstrap. Extract the archive, and do the following:
-<ul>
-    <li>Copy <span class="badge badge-primary">css/bootstrap.css</span> into <span class="badge badge-primary">assets/css/bootstrap.css</span></li>
-    <li>Copy <span class="badge badge-primary">css/bootstrap.js</span> into <span class="badge badge-primary">assets/js/bootstrap.js</span></li>
-</ul></p>
+            <p>To use Bootstrap, you have to add a css file and js file to the existing project. To proceed, go to <a
+                    href="https://getbootstrap.com/docs/4.0/getting-started/download/">https://getbootstrap.com/docs/4.0/getting-started/download/</a>,
+                and Download the <b><i>Compiled</i> CSS and JS</b> version of bootstrap. Extract the archive, and do the
+                following:
+            <ul>
+                <li>Copy <span class="badge badge-primary">css/bootstrap.css</span> into <span
+                        class="badge badge-primary">assets/css/bootstrap.css</span>
+                </li>
+                <li>Copy <span class="badge badge-primary">css/bootstrap.js</span> into <span
+                        class="badge badge-primary">assets/js/bootstrap.js</span>
+                </li>
+            </ul>
+            </p>
 
-<p>Now modify the HTML template to make it look like this:</p>
-<textarea class=html_code_no_line_numbers>
+            <p>Now modify the HTML template to make it look like this:</p>
+            <textarea class=html_code_no_line_numbers>
 <!DOCTYPE html>
 <html>
 <head>
@@ -223,9 +224,13 @@ body {
 </html>
 </textarea>
 
-<p>The application should be close to what is depicted in the following screenshot:</p>
-<img style="height: 400px;" src="assets/chapter3/chapter3_bootstrap.png"/>
+            <p>The application should be close to what is depicted in the following screenshot:</p>
+            <img style="height: 400px;" src="assets/chapter3/chapter3_bootstrap.png"/>
 
+        </div>
+        <div class="col">
+        </div>
+    </div>
 </div>
 <script>
 
@@ -316,6 +321,8 @@ body {
                     readOnly: true
                 });
             });
+
+
 
 
 </script>

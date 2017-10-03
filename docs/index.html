@@ -4,6 +4,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
           integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://bootswatch.com/cerulean/bootstrap.min.css">-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
             integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
             crossorigin="anonymous"></script>
@@ -35,12 +36,6 @@
               margin-top: 1rem;
               margin-bottom: 0;
             }
-            [class*="col-"] {
-              padding-top: 1rem;
-              padding-bottom: 1rem;
-              background-color: rgba(86,61,124,.15);
-              border: 1px solid rgba(86,61,124,.2);
-            }
 
             hr {
               margin-top: 2rem;
@@ -63,175 +58,47 @@
     </style>
 </head>
 <body>
-<div id="container">
-<h1>Chapter 1 - First steps with Flask</h1>
-<h2><i>Creating a Flask application, implementing a view and enabling the DEBUG mode.</i></h2>
+<div class="container">
 
-<h3>I- Creating a Flask application</h3>
+      <div class="row row-offcanvas row-offcanvas-right">
 
-<p>A simple Flask application is composed of several views, each of them being implemented by a Python function. When a
-    user sends a request to a Flask web application, his request is intercepted by Flask and is routed to the
-    corresponding python view/function. The result of the function call is then used to build the response which is
-    later sent to the user.</p>
+        <div class="col-12 col-md-12">
+          <div class="jumbotron">
+            <h1>Development of a web application using Flask</h1>
+            <p>This page provides links to the differents chapters of the course.</p>
+          </div>
+          <div class="row">
+            <div class="col-6 col-lg-4">
+              <h2>Chapter 1</h2>
+              <p>Creating a Flask application, implementing a view and enabling the DEBUG mode.</p>
+              <p><a class="btn btn-secondary" href="chapter1.html" role="button">View details &raquo;</a></p>
+            </div><!--/span-->
+            <div class="col-6 col-lg-4">
+              <h2>Chapter 2</h2>
+              <p>Creating forms with Flask, generating hypertext links and introduction to cookies.</p>
+              <p><a class="btn btn-secondary" href="chapter2.html" role="button">View details &raquo;</a></p>
+            </div><!--/span-->
+            <div class="col-6 col-lg-4">
+              <h2>Chapter 3</h2>
+              <p>Creating Web templates, adding assets to the application, and prettify the application using <a href="http://getbootstrap.com/">Bootstrap.</p>
+              <p><a class="btn btn-secondary" href="chapter3.html" role="button">View details &raquo;</a></p>
+            </div><!--/span-->
+            <div class="col-6 col-lg-4">
+              <h2>Chapter 4</h2>
+              <p>Configuring a database, introduction to model classes, querying objects from the database and setting up relationships between model classes.</p>
+              <p><a class="btn btn-secondary" href="chapter4.html" role="button">View details &raquo;</a></p>
+            </div><!--/span-->
+          </div><!--/row-->
+        </div><!--/span-->
 
-<p>We will now create a first Flask application. The first step is to import Flask and to create a Flask application:
-    create a <span class="badge badge-primary">server.py</span> file and add the following lines:</p>
+      </div><!--/row-->
 
-<textarea class=code_no_line_numbers>
-from flask import Flask
-app = Flask("helloworldApplication")
-</textarea>
+      <hr>
 
-<p>We need now Flask to wait for user requests, otherwise the script will immediately end. Add the following lines in
-    <span class="badge badge-primary">server.py</span>:</p>
+      <footer>
+        <p>&copy; Jonathan Pastor 2017</p>
+      </footer>
 
-<textarea class=code_no_line_numbers>
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
-</textarea>
-
-<p>Now, run this code and access the web application (on the 8080 port) via a web browser. Doing so should makes you
-    land on an error page as in the following screenshot:</p>
-<img style="height: 400px;" src="assets/chapter1/chapter1_notfound.png"/>
-
-<p>This error message is completely normal, as the web application does not contain yet any view!</p>
-<p>In the next Section, you will learn how to develop a view.</p>
-
-
-<h3>II- Implementing a view</h3>
-
-<p>Let's implement a simple view that reacts to users' request by displaying "Helloworld". To do so, insert the following
-    code in <span class="badge badge-primary">server.py</span>:</p>
-<textarea class=code_no_line_numbers>
-@app.route("/")
-def hello():
-    return "Hello World!"
-</textarea>
-
-<p>Here several things are important:
-<ul>
-    <li>The view is implemented by a python function (<i>hello</i>)</li>
-    <li>The view corresponds to the "<b>/</b>" <a href="https://en.wikipedia.org/wiki/URL">URL</a> (root view)</li>
-    <li>The URL is defined by using a <a
-            href="https://realpython.com/blog/python/primer-on-python-decorators/">Python decorator</a></li>
-    <li>The response (which will be sent to the user) is a python string</li>
-</ul>
-</p>
-
-<p>Accessing the web application should now display "Hello World!":</p>
-<img style="height: 400px;" src="assets/chapter1/chapter1_helloworld.png"/>
-
-<p>A view can also take some arguments: in the following example, we created an <i>hello_name_age</i> view, which takes two parameters:</p>
-<textarea class=code_no_line_numbers>
-@app.route("/hello/<firstname>/<lastname>/<int:age>")
-def hello_name_age(firstname, lastname, age):
-    return "Hello %s %s, you are %i years old" % (firstname, lastname, age)
-</textarea>
-
-<p>Which results in the following:</p>
-<img style="height: 400px;" src="assets/chapter1/chapter1_helloArguments.png"/>
-
-<p>Please note that a type can be specified to any argument of a view. To learn more about typing arguments, please take
-    a look to the <a href="http://flask.pocoo.org/docs/0.12/quickstart/#variable-rules">Flask documentation</a></p>
-
-<h3>III- Enabling the DEBUG mode</h3>
-
-<p>The debug mode enables a Flask application to auto-reload when its source code changes, which is convenient during the
-development process. To enable the debug-mode, adapt the code of <span class="badge badge-primary">server.py</span> with these two lines and
-    relaunch the Flask application:</p>
-
-<textarea class=code_no_line_numbers>
-app.jinja_env.auto_reload = True # This line will make sense in Chapter 3
-app.run(host="0.0.0.0", port=8080, debug=True)
-</textarea>
-
-<p>Now, each modification of the application's source code will result in a refresh of the application. To test it, change the
-    value returned by the view <i>hello</i> and reload the web browser.</p>
-
-<div class="alert alert-danger" role="alert">
-    <strong>Danger!</strong> When the application is reloaded, the python variables are lost (Chapter 4 will show how to
-    solve this, by using a database storage).
-</div>
-
-<h3>IV- Debugging a Flask application in practice: the web console</h3>
-
-<p>First, let's add a new view which is prone to failure:</p>
-<textarea class=code_no_line_numbers>
-@app.route("/fail_divide_zero")
-def fail_divide_zero():
-    i = 10
-    j = 0
-    return "%i" % (i / j)
-</textarea>
-
-<p>Accessing the view should lead to an alarming error page, as depicted in the following screenshot. To enable the web
-    console, click on the small console icon (c.f. the red circle):</p>
-<img style="height: 400px;" src="assets/chapter1/chapter1_divideZero.png"/>
-
-<div class="alert alert-warning" role="alert">
-    <p><strong>Warning!</strong> You will be asked to enter a PIN code. To find the PIN code, check the logs of the web
-        application for a message looking like in the following screenshot:</p>
-    <img src="assets/chapter1/chapter1_pinCode.png"/>
-</div>
-
-<p>Via the web console, you can access to any variables in the scope of the erroneous function:</p>
-<img style="margin-bottom: 1rem;" src="assets/chapter1/chapter1_webConsole.png"/>
-
-    <p>In the previous screenshot, the value of variable <i>j</i> have been checked, proving that it was the real cause of the error.</p>
-
-<h3>V- Summary</h3>
-<p>The following code summarizes what has been shown in this chapter:</p>
-<textarea class=code>
-from flask import Flask
-app = Flask("helloworldApplication")
-
-@app.route("/")
-def hello():
-    return "Hello World!"
-
-@app.route("/hello/<firstname>/<lastname>/<int:age>")
-def hello_name_age(firstname, lastname, age):
-    return "Hello %s %s, you are %i years old" % (firstname, lastname, age)
-
-@app.route("/fail_divide_zero")
-def fail_divide_zero():
-    i = 10
-    j = 0
-    return "%i" % (i / j)
-
-if __name__ == "__main__":
-    app.jinja_env.auto_reload = True
-    app.run(host="0.0.0.0", port=8080, debug=True)
-</textarea>
-
-</div>
-<script>
-
-            $.map( $(".code"), function(code_tag) {
-                var editor = CodeMirror.fromTextArea(code_tag, {
-                    mode: {name: "python",
-                           version: 3,
-                           singleLineStringErrors: false},
-                    lineNumbers: true,
-                    indentUnit: 4,
-                    matchBrackets: true,
-                    readOnly: true
-                });
-            });
-
-            $.map( $(".code_no_line_numbers"), function(code_tag) {
-                var editor = CodeMirror.fromTextArea(code_tag, {
-                    mode: {name: "python",
-                           version: 3,
-                           singleLineStringErrors: false},
-                    lineNumbers: false,
-                    indentUnit: 4,
-                    matchBrackets: true,
-                    readOnly: true
-                });
-            });
-
-
-</script>
+    </div><!--/.container-->
 </body>
 </html>

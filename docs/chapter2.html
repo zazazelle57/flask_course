@@ -18,64 +18,29 @@
     <script src="js/htmlmixed.js"></script>
     <script src="js/matchbrackets.js"></script>
 
-    <style>
-            body {
-              padding-top: 2rem;
-              padding-bottom: 2rem;
-            }
-
-            h3 {
-              margin-top: 2rem;
-            }
-
-            .row {
-              margin-bottom: 1rem;
-            }
-            .row .row {
-              margin-top: 1rem;
-              margin-bottom: 0;
-            }
-            [class*="col-"] {
-              padding-top: 1rem;
-              padding-bottom: 1rem;
-              background-color: rgba(86,61,124,.15);
-              border: 1px solid rgba(86,61,124,.2);
-            }
-
-            hr {
-              margin-top: 2rem;
-              margin-bottom: 2rem;
-            }
-
-            .CodeMirror {
-                height: auto;
-            }
-
-            .CodeMirror-scroll {
-                height: auto;
-            }
-
-            p {
-                margin-top: 0;
-                margin-bottom: 1rem;
-            }
-
-    </style>
+    <link rel="stylesheet" href="css/course.css">
 </head>
 <body>
-<p id="container">
-<h1>Chapter 2 - Interacting with users</h1>
-<h2><i>Creating forms with Flask, generating hypertext links and introduction to cookies.</i></h2>
+<div id="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-10 main-content">
 
-<h3>I- Creating forms with Flask</h3>
+            <h1>Chapter 2 - Interacting with users</h1>
+            <h4><i>Creating forms with Flask, generating hypertext links and introduction to cookies.</i></h4>
 
-<p>A form is a set of fields that are displayed in a web page. Users can fill these fields and submit the form to the
-    web application (usually by clicking on a submit button). Once a form is submitted, information filled by users will
-    be transmitted to a specified endpoints (i.e. a python function) of the web application.</p>
+            <h3>I- Creating forms with Flask</h3>
 
-<p>The first step is to create a view that generates an HTML form:</p>
+            <p>A form is a set of fields that are displayed in a web page. Users can fill these fields and submit the
+                form to the
+                web application (usually by clicking on a submit button). Once a form is submitted, information filled
+                by users will
+                be transmitted to a specified endpoints (i.e. a python function) of the web application.</p>
 
-<textarea class=code_no_line_numbers>
+            <p>The first step is to create a view that generates an HTML form:</p>
+
+            <textarea class=code_no_line_numbers>
 @app.route("/")
 def generate_form():
     html_code = """<form action="/form_handler" method="post">
@@ -85,39 +50,47 @@ def generate_form():
     return html_code
 </textarea>
 
-<p><i>generate_form</i> will display a form containing a text field and a submit button. When a user enters some text and
-    clicks on the <b>submit</b> button, the data entered in the text field is transmitted to another view (<i>form_handler</i>),
-    which will be in charge of processing the data entered in the form.</p>
+            <p><i>generate_form</i> will display a form containing a text field and a submit button. When a user enters
+                some text and
+                clicks on the <b>submit</b> button, the data entered in the text field is transmitted to another view
+                (<i>form_handler</i>),
+                which will be in charge of processing the data entered in the form.</p>
 
-<p>Let's now create a view that is in charge of processing data from the previous form: it will be accessible via the <i>form_handler</i> URL.
-    This function will check the information provided by the incoming request, extract a task from this information, and
-    display the task as a result.</p>
+            <p>Let's now create a view that is in charge of processing data from the previous form: it will be
+                accessible via the <i>form_handler</i> URL.
+                This function will check the information provided by the incoming request, extract a task from this
+                information, and
+                display the task as a result.</p>
 
-<textarea class=code_no_line_numbers>
+            <textarea class=code_no_line_numbers>
 @app.route("/form_handler", methods=["POST"])
 def form_handler():
     task_text = request.form["task_text"]
     return "You entered \"%s\"" % task_text
             </textarea>
 
-<p>Now, after running the web application, access the <b>/</b> URL. You should get access to the following page:</p>
-<img style="height: 400px;" src="assets/chapter2/chapter2_simpleform.png"/>
+            <p>Now, after running the web application, access the <b>/</b> URL. You should get access to the following
+                page:</p>
+            <img style="height: 400px;" src="assets/chapter2/chapter2_simpleform.png"/>
 
-<p>Enter some text in the text field and click on the <b>Submit</b> button. You should land on the following page:</p>
-<img style="height: 400px;" src="assets/chapter2/chapter2_simpleresponse.png"/>
+            <p>Enter some text in the text field and click on the <b>Submit</b> button. You should land on the following
+                page:</p>
+            <img style="height: 400px;" src="assets/chapter2/chapter2_simpleresponse.png"/>
 
-<h3>II- Generating hypertext links to views and redirecting users</h3>
-<h4>A- Generating hypertext links</h4>
-<p>In HTML, creating an hypertext link to a web application's endpoint is made by using the <u>&lt;a&gt;</u> tag and by specifying an URL in its
-    <b>href</b> property. Here are few example of HTML links:</p>
-<textarea class=code_no_line_numbers>
+            <h3>II- Generating hypertext links to views and redirecting users</h3>
+            <h4>A- Generating hypertext links</h4>
+            <p>In HTML, creating an hypertext link to a web application's endpoint is made by using the <u>&lt;a&gt;</u>
+                tag and by specifying an URL in its
+                <b>href</b> property. Here are few example of HTML links:</p>
+            <textarea class=code_no_line_numbers>
 <a href="/index.html">absolute link</a>
 <a href="../chapter1/index.html">relative link</a>
 <a href="google.fr">link to google</a>
 </textarea>
 
-<p>Flask provides the <b>url_for</b> helper to generate URL to endpoints: it takes the name of a view as a parameter, and returns an URL to the view. The following snippet illustrates how to use it:</p>
-<textarea class=code_no_line_numbers>
+            <p>Flask provides the <b>url_for</b> helper to generate URL to endpoints: it takes the name of a view as a
+                parameter, and returns an URL to the view. The following snippet illustrates how to use it:</p>
+            <textarea class=code_no_line_numbers>
 from flask import url_for
 
 @app.route("/")from flask import request, url_for, make_response, redirect
@@ -129,15 +102,17 @@ def generate_form():
     return html_code
 </textarea>
 
-<p>You can complete the generated link with arguments by adding these arguments to the <b>url_form</b> as in the following example:</p>
-<textarea class=code_no_line_numbers>
+            <p>You can complete the generated link with arguments by adding these arguments to the <b>url_form</b> as in
+                the following example:</p>
+            <textarea class=code_no_line_numbers>
 url_for("hello_name_age", firstname="Jonathan", lastname="Pastor", age=30)
 </textarea>
 
-<h4>B- Redirecting users</h4>
+            <h4>B- Redirecting users</h4>
 
-After the execution of a view, it is possible to redirect an user to another view by using the <b>redirect</b> function, as in the following example:
-<textarea class=code_no_line_numbers>
+            After the execution of a view, it is possible to redirect an user to another view by using the
+            <b>redirect</b> function, as in the following example:
+            <textarea class=code_no_line_numbers>
 from flask import redirect
 
 @app.route("/form_handler", methods=["POST"])
@@ -146,22 +121,27 @@ def form_handler():
     response = redirect(url_for("generate_form"))
 </textarea>
 
-<p>Now, after submitting the form, the user should be redirected back to the view that generates the HTML form.</p>
+            <p>Now, after submitting the form, the user should be redirected back to the view that generates the HTML
+                form.</p>
 
-<h3>III- Introduction to cookies</h3>
+            <h3>III- Introduction to cookies</h3>
 
-<p>A <a href="https://en.wikipedia.org/wiki/HTTP_cookie">cookie</a> is an information stores by a website on the user's computer.</p>
+            <p>A <a href="https://en.wikipedia.org/wiki/HTTP_cookie">cookie</a> is an information stores by a website on
+                the user's computer.</p>
 
-<p>With Flask, to store a cookie in the user's computer, one should use the <b><a href="http://flask.pocoo.org/docs/0.12/quickstart/#sessions">session</a></b> mechanism, which provides a high level API for manipulating cookies.</p>
+            <p>With Flask, to store a cookie in the user's computer, one should use the <b><a
+                    href="http://flask.pocoo.org/docs/0.12/quickstart/#sessions">session</a></b> mechanism, which
+                provides a high level API for manipulating cookies.</p>
 
-<p>First, import the session mechanism from Flask and set an application password (it will be used to encrypt cookies):</p>
-<textarea class=code_no_line_numbers>
+            <p>First, import the session mechanism from Flask and set an application password (it will be used to
+                encrypt cookies):</p>
+            <textarea class=code_no_line_numbers>
 from flask import session
 app.secret_key = "very_secret_secret"
 </textarea>
 
-<p>Now, you can set cookies by manipulating the <i>session</i> object as a dictionary:</p>
-<textarea class=code_no_line_numbers>
+            <p>Now, you can set cookies by manipulating the <i>session</i> object as a dictionary:</p>
+            <textarea class=code_no_line_numbers>
 @app.route("/increment")
 def increment_counter():
     if "count" in session:
@@ -171,9 +151,9 @@ def increment_counter():
     return session["count"]
 </textarea>
 
-<h3>V- Summary</h3>
-<p>The following code summarizes what has been shown in this chapter:</p>
-<textarea class=code>
+            <h3>V- Summary</h3>
+            <p>The following code summarizes what has been shown in this chapter:</p>
+            <textarea class=code>
 from flask import Flask
 from flask import request, url_for, redirect, session
 app = Flask("firstFormApplication")
@@ -211,6 +191,10 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
 </textarea>
 
+        </div>
+        <div class="col">
+        </div>
+    </div>
 </div>
 <script>
 
@@ -237,6 +221,7 @@ if __name__ == "__main__":
                     readOnly: true
                 });
             });
+
 
 
 </script>
