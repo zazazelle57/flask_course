@@ -8,7 +8,7 @@ def generate_form():
 @app.route("/form_handler", methods=["POST"])
 def process_form():
     some_text = request.form["field"]
-    return "texte: "+some_text
+    return "texte: "some_text
 
 if __name__ == "__main__":
     app.jinja_env.auto_reload = True
