@@ -44,7 +44,7 @@
 
             <p>We will now create a first Flask application. The first step is to import Flask and to create a Flask
                 application:
-                create a <span class="badge badge-primary">server.py</span> file and add the following lines:</p>
+                create a <span class="badge badge-primary">main.py</span> file and add the following lines:</p>
 
             <textarea class=code_no_line_numbers>
 from flask import Flask
@@ -53,7 +53,7 @@ app = Flask("helloworldApplication")
 
             <p>We need now Flask to wait for user requests, otherwise the script will immediately end. Add the following
                 lines in
-                <span class="badge badge-primary">server.py</span>:</p>
+                <span class="badge badge-primary">main.py</span>:</p>
 
             <textarea class=code_no_line_numbers>
 if __name__ == "__main__":
@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
             <p>Let's implement a simple view that reacts to users' request by displaying "Helloworld". To do so, insert
                 the following
-                code in <span class="badge badge-primary">server.py</span>:</p>
+                code in <span class="badge badge-primary">main.py</span>:</p>
             <textarea class=code_no_line_numbers>
 @app.route("/")
 def hello():
@@ -115,7 +115,7 @@ def hello_name_age(firstname, lastname, age):
 
             <p>The debug mode enables a Flask application to auto-reload when its source code changes, which is
                 convenient during the
-                development process. To enable the debug-mode, adapt the code of <span class="badge badge-primary">server.py</span>
+                development process. To enable the debug-mode, adapt the code of <span class="badge badge-primary">main.py</span>
                 with these two lines and
                 relaunch the Flask application:</p>
 

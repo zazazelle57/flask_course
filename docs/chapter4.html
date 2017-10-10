@@ -59,7 +59,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 </textarea>
 
-            <p>Now, modify the existing <span class="badge badge-primary">server.py</span> so that it creates the
+            <p>Now, modify the existing <span class="badge badge-primary">main.py</span> so that it creates the
                 database at
                 startup:</p>
 
@@ -89,7 +89,7 @@ class Task(db.Model):
     isDone = db.Column(db.Boolean)
 </textarea>
 
-            <p>Now, restart the script and modify the code of <span class="badge badge-primary">server.py</span> to make
+            <p>Now, restart the script and modify the code of <span class="badge badge-primary">main.py</span> to make
                 it store
                 data in database instead of using sessions:</p>
             <textarea class="code_no_line_numbers">
@@ -174,7 +174,7 @@ class Task(db.Model):
                 Please take a
                 look a the modifications we made to the existing code.</p>
 
-            <p><span class="badge badge-primary">server.py</span>:</p>
+            <p><span class="badge badge-primary">main.py</span>:</p>
             <textarea class=code>
 from flask import Flask
 from flask import request, url_for, redirect, session, render_template
