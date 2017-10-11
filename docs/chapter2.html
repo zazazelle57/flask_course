@@ -119,6 +119,7 @@ from flask import redirect
 def form_handler():
     task_text = request.form["task_text"]
     response = redirect(url_for("generate_form"))
+    return response
 </textarea>
 
             <p>Now, after submitting the form, the user should be redirected back to the view that generates the HTML
